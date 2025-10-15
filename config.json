@@ -1,0 +1,10 @@
+{
+  "localIPv4Address": "192.168.3.4",
+  "mqtt": "mqtt://mqtt.presov.sk",
+  "mqtt_home": "dvcs/1/mprsv/traffic/sensors/speed/DDATA/sprava-komunikacii/roadsense/radarix/radar-1/default/device/1/",
+
+  "logfile": "./SpeedAlerts.log",
+   
+  "sensors.1": "Solivar",
+  
+}
