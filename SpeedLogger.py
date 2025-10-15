@@ -1,35 +1,58 @@
 
 #!/usr/bin/python3
-import paho.mqtt.client as mqtt_client
+import paho.mqtt.client as mqtt
 import datetime as DT
 import logging
 import time
 import json
+import os
 from influxdb import InfluxDBClient
 import random
+from dotenv import load_dotenv
+import ssl
 
-client_id = f'weatherhub-mqtt-{random.randint(0, 100)}'
-topic = "MobileAlerts/#"
+client_id = f'speedLogger-mqtt-{random.randint(0, 100)}'
+#client_id = "mqtt-explorer-ivanecky"
+topic = "dvcs/1/mprsv/traffic/sensors/speed/DDATA/sprava-komunikacii/roadsense/radarix/radar-1/default/device/#"
 
-logger = logging.getLogger('IOT.WeatherHub')
+logger = logging.getLogger('Presov.SpeedLogger')
 
-def connect_mqtt() -> mqtt_client:
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
+def connect_mqtt() -> mqtt:
+    def on_connect(client, userdata, flags, reason_code, properties):
+        if reason_code == 0:
             logger.info("Connected to MQTT Broker!")
         else:
-            logger.info("Failed to connect, return code %d\n", rc)
+            logger.info("Failed to connect, return code %d\n", reason_code)
 
-    broker = "192.168.3.4"
-    logger.info("Trying to connect to mqtt")
-    client = mqtt_client.Client(client_id)
-    client.username_pw_set("iotImc", "M0jBr00k3r")
-    client.on_connect = on_connect
-    client.connect(broker)
+
+    #Pripojenie na špeciálny port
+    try:
+        logger.info("Trying to connect to mqtt")
+        client = mqtt.Client(client_id=client_id, 
+                             protocol=mqtt.MQTTv311, 
+                             callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+        client.username_pw_set(os.getenv("MQTT_UID"), os.getenv("MQTT_PWD"))
+        client.on_connect = on_connect
+        # NOVÁ A ZJEDNODUŠENÁ KONFIGURÁCIA TLS:
+        client.tls_set(
+            ca_certs=None,            # Zmenené na None – skúsi použiť systémové CA
+            certfile=None,            # Zmenené na None – nepoužívame klientsky certifikát
+            keyfile=None,             # Zmenené na None – nepoužívame klientsky kľúč
+            cert_reqs=ssl.CERT_REQUIRED, # Stále vyžadujeme overenie servera (odporúčané)
+            tls_version=ssl.PROTOCOL_TLS
+        )
+        #client.tls_insecure_set(True)
+        client.connect(os.getenv("BROKER_ADDRESS"), int(os.getenv("BROKER_PORT")))
+    except Exception as e:
+        print(f"Nastala chyba počas pripojenia: {e}")
+        exit()
+    
+    logger.info(f"Connected to mqtt server:{os.getenv("BROKER_ADDRESS")}")
+    
     return client
 
 
-def subscribe(client: mqtt_client):
+def subscribe(client: mqtt):
     def on_message(client, userdata, msg):
         msg_decoded = msg.payload.decode()
         logger.info(f"Received `{msg_decoded}` from `{msg.topic}` topic")
@@ -40,217 +63,54 @@ def subscribe(client: mqtt_client):
 
 
 def message_handler(client, msg, topic):
-    if topic.find("112568bfba42") > 0:
-        handleTfaStation(topic, msg)
-    elif topic.find("023049c7fb7b") > 0:
-        handleOutdoorTemp(topic, msg)
-    elif topic.find("0b12eff0ea17") > 0:
-        handleWindSensor(topic, msg)
-    elif topic.find("082972168812") > 0:
-        handleRainSensor(topic, msg)
+    handleSpeedSensor(topic, msg)
+
+def sendSpeedToInflux(data):
+    json_body = [
+        {
+
+            "measurement": "speed",
+            "time": data["time"],
+
+            "tags": {
+                'location': data["sensor"]
+            },
+            "fields": {
+                "speed":   		data["speed"],
+                "limit_exceeded": 	data["limit_exceeded"],
+                "overspeed":	data["overspeed"]
+            }
+        }
+    ]
+
+    influxdb_client.write_points(json_body)
+    logger.info('Speed data stored to influx DB')
 
 
-def handleTfaStation(topic, msg):
+def handleSpeedSensor(topic, msg):
     data = dict()
     sensorData = json.loads(msg)
-    # create data
-    data["time"] = sensorData['t']
-
     logger.info("Storing data: " + topic)
+    
+    # create data
+   
 
     try:
-        data["sensor"] = "Indoor-Prizemie"
-        data["temp"] = 1.0*sensorData["temperature1"][0]
-        data["hum"] = 1.0*sensorData["humidity1"][0]
-
+        data["sensor"]  = "SpeedSensor.Solivar"
+        data["time"]    = sensorData['metrics']['vehicle_measurement/speed_measurement_time']['value']
+        data["speed"]   = sensorData['metrics']["vehicle_measurement/speed"]['value']
+        data["limit_exceeded"]  = sensorData['metrics']["vehicle_measurement/limit_exceeded"]['value']
+        data["overspeed"]       = sensorData['metrics']["vehicle_measurement/speed"]['value'] - 50
+        
+        
+        logger.info(f"Storing data: {data}")
+        
         # send to influx only when data are valid
-        if data["temp"] > -9999.0:
-            sendToInflux(data)
-
-        data["sensor"] = "Indoor-Poschodie"
-        data["temp"] = 1.0*sensorData["temperatureIN"][0]
-        data["hum"] = 1.0*sensorData["humidityIN"][0]
-        if data["temp"] > -9999.0:
-            sendToInflux(data)
-
-        data["sensor"] = "Indoor-chyzka"
-        data["temp"] = 1.0*sensorData["temperature2"][0]
-        data["hum"] = 1.0*sensorData["humidity2"][0]
-        if data["temp"] > -9999.0:
-            sendToInflux(data)
-
-        data["sensor"] = "Bikos outdoor"
-        data["temp"] = 1.0*sensorData["temperature3"][0]
-        data["hum"] = 1.0*sensorData["humidity3"][0]
-        if data["temp"] > -9999.0:
-            sendToInflux(data)
+        if data["speed"] > 0:
+            sendSpeedToInflux(data)
 
     except Exception as e:
         logger.error(e, 'Problem with influx db insert.')
-
-
-def handleOutdoorTemp(topic, msg):
-    data = dict()
-    sensorData = json.loads(msg)
-    # create data
-    data["time"] = sensorData['t']
-
-    logger.info("Storing data: " + topic)
-
-    try:
-        data["sensor"] = "Bikos outdoor.2"
-        data["temp"] = 1.0*sensorData["temperature"][0]
-        # send to influx only when data are valid
-        if data["temp"] > -9999.0:
-            sendTempToInflux(data)
-
-    except Exception as e:
-        logger.error(e, 'Problem with influx db insert.')
-
-
-def handleWindSensor(topic, msg):
-    data = dict()
-    sensorData = json.loads(msg)
-    # create data
-    data["time"] = sensorData["t"]
-
-    logger.info("Storing data: " + topic)
-
-    try:
-        data["sensor"] = "Bikos wind"
-        data["directionDegree"] = 1.0*sensorData["directionDegree"]
-        data["direction"] = sensorData["direction"]
-        data["speed"] = 1.0*sensorData["windSpeed"]
-        data["gustSpeed"] = 1.0*sensorData["gustSpeed"]
-        data["lastTransmit"] = sensorData["lastTransmit"]
-
-        # send to influx only when data are valid
-        sendWindDataToInflux(data)
-
-    except Exception as e:
-        logger.error(e, 'Problem with influx db insert.')
-
-
-def sendWindDataToInflux(mData):
-
-    json_body = [
-        {
-
-            "measurement": "wind",
-            "time": mData["time"],
-
-            "tags": {
-                'location': mData["sensor"]
-            },
-            "fields": {
-                "speed":   		mData["speed"],
-                "gustSpeed": 	mData["gustSpeed"],
-                "directionDegree":	mData["directionDegree"],
-                "direction":	mData["direction"],
-                "lastTransmit":	mData["lastTransmit"]
-            }
-        }
-    ]
-
-    influxdb_client.write_points(json_body)
-    logger.info('Wind data stored to influx DB')
-
-
-def handleRainSensor(topic, msg):
-    data = dict()
-    sensorData = json.loads(msg)
-    # create data
-    logger.info("Storing data: " + topic)
-
-    try:
-        if sensorData["eventTimes"][0] == 0:
-            # impuls has been generated - bucket filled
-            data["sensor"] = "Bikos rainfall"
-            data["value"] = 0.258*sensorData["eventCounter"]
-            data["flipCount"] = sensorData["eventCounter"]
-            data["time"] = sensorData["t"]
-            data["eventDuration"] = sensorData["eventTimes"][1]
-
-            # send to influx only when data are valid and value has changed
-            # if( prev count < actual count)
-            sendRainfallToInflux(data)
-
-    except Exception as e:
-        logger.error(e, 'Problem with influx db insert.')
-
-
-def sendRainfallToInflux(mData):
-    json_body = [
-        {
-
-            "measurement": "rain",
-            "time": mData["time"],
-
-            "tags": {
-                'location': mData["sensor"]
-            },
-            "fields": {
-                "flipCount":        mData["flipCount"],
-                "value":        	mData["value"],
-                "eventDuration":	mData["eventDuration"]
-            }
-        }
-    ]
-
-    influxdb_client.write_points(json_body)
-    logger.info('Rain data stored to influx DB')
-
-
-def sendTempToInflux(mData):
-
-    json_body = [
-        {
-            "measurement": "temperature",
-            "time": mData["time"],
-
-            "tags": {
-                'location': mData["sensor"]
-            },
-            "fields": {
-                "val":  mData["temp"]
-            }
-        }
-    ]
-
-    influxdb_client.write_points(json_body)
-    logger.info('Temperature data stored to influx DB')
-
-
-def sendToInflux(mData):
-
-    json_body = [
-        {
-            "measurement": "humidity",
-            "time": mData["time"],
-
-            "tags": {
-                'location': mData["sensor"]
-            },
-            "fields": {
-                "val":  mData["hum"]
-            }
-        },
-        {
-            "measurement": "temperature",
-            "time": mData["time"],
-
-            "tags": {
-                'location': mData["sensor"]
-            },
-            "fields": {
-                "val":  mData["temp"]
-            }
-        }
-    ]
-
-    influxdb_client.write_points(json_body)
-    logger.info('Weather Station data stored to influx DB')
-
 
 def has_changed(client, topic, msg):
     topic2 = topic.lower()
@@ -277,9 +137,10 @@ if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     logger.info('Application run at: %s', DT.datetime.today())
 
+    load_dotenv()
     # Initialize influx conection
     influxdb_client = InfluxDBClient('192.168.3.4', 8086)
-    influxdb_client.switch_database('home_data')
+    influxdb_client.switch_database('presov_public')
     logger.info('Connected to Influx DB')
 
     run()
