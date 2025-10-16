@@ -46,7 +46,7 @@ def connect_mqtt() -> mqtt:
         print(f"Nastala chyba počas pripojenia: {e}")
         exit()
     
-    logger.info(f"Connected to mqtt server:{os.getenv("BROKER_ADDRESS")}")
+    logger.info(f"Connected to mqtt server:{os.getenv('BROKER_ADDRESS')}")
     
     return client
 
