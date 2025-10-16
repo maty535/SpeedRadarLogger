@@ -3,7 +3,7 @@
 Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného na ulici Soľnobanská v Solivare.
 
 - [Umiestnenie radaru](https://maps.app.goo.gl/C8tVr3E4f2CFyEDU6)
-- Produkt je dodávany firmou [Bellimpex s.r.o.](https://www.bellimpex.sk/produkty.html)
+- Samotný rýchlostný radar je dodávany firmou [Bellimpex s.r.o.](https://www.bellimpex.sk/produkty.html)
 
 <img width="973" height="504" alt="image" src="https://github.com/user-attachments/assets/24b2307f-8089-4412-bedc-aa1dfee44bb3" />
 
