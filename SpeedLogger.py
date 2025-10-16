@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 import ssl
 
 client_id = f'speedLogger-mqtt-{random.randint(0, 100)}'
-#client_id = "mqtt-explorer-ivanecky"
 topic = "dvcs/1/mprsv/traffic/sensors/speed/DDATA/sprava-komunikacii/roadsense/radarix/radar-1/default/device/#"
 
 logger = logging.getLogger('Presov.SpeedLogger')
