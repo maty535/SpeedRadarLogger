@@ -138,8 +138,8 @@ if __name__ == '__main__':
 
     load_dotenv()
     # Initialize influx conection
-    influxdb_client = InfluxDBClient('192.168.3.4', 8086)
-    influxdb_client.switch_database('presov_public')
+    influxdb_client = InfluxDBClient(os.getenv("INFLUX_HOST"), os.getenv("INFLUX_PORT"))
+    influxdb_client.switch_database(os.getenv("INFLUX_DB"))
     logger.info('Connected to Influx DB')
 
     run()
