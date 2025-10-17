@@ -8,7 +8,7 @@
 
 ```
         Pokuta:
-          if r._value <= 6 then 0.0
+          if r._value < 6 then 0.0
            else if r._value <= 10.0 then 15.0
            else if r._value <= 15 then 39.0
            else if r._value <= 19 then 66.0
