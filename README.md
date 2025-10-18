@@ -12,7 +12,7 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 - 95% všetkých prejazdov meraných radarom neprekročí rýchlosť **80 km/h**
 - 50% všetkých prejazdov meraných radarom neprekročí rýchlosť **56 km/h**
 - Vo výnimočných (ojedinelých) prípadoch je prekračovaná maximálna povolená rýchlosť v obci aj o viac ako **50 km/h**
-- Rýchlostný radar pri aktuálne nastavených rýchlostných limitoch a disciplinovanosti vodičov je pri použití objektívnej zodpovednosti spôsobilý generovať príjem do rozpočtu obce, alebo štátu viac ako **50 000 €** denne.
+- Rýchlostný radar pri aktuálne nastavených rýchlostných limitoch a disciplinovanosti vodičov je pri použití objektívnej zodpovednosti spôsobilý generovať príjem do rozpočtu obce, alebo štátu viac ako **50 000 €** denne, počas pracovných dní a viac ako **40 000 €** denne počas weekendov a dní pracovného pokoja.
 
 ## Zobrazenie dát a ich ukazovateľov pomocou grafov
 
