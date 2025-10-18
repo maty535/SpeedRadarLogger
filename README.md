@@ -6,7 +6,7 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 - Samotný rýchlostný radar je dodávany firmou [Bellimpex s.r.o.](https://www.bellimpex.sk/produkty.html)
 - [Výška pokút podľa zákona](./docs/pokuty.md)
 
-## Štatistické vyhodnotenie dát z rýchlostného radaru
+## Štatistické vyhodnotenie dát z rýchlostného radaru k 18.10.2025
 
 - Na základe štatistického vyhodnotenia dát z rýchlostného radaru za 3 dni môžme konštatovať, že v tejto oblasti každý druhý vodič nedodržiava, resp. prekračuje povolený rýchlostný limit 50 km/h + tolerancia 5 km/h.
 - 99% všetkých prejazdov danou lokalitou neprekročí rýchlosť 78 km/h</li>
