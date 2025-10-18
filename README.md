@@ -6,6 +6,13 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 - Samotný rýchlostný radar je dodávany firmou [Bellimpex s.r.o.](https://www.bellimpex.sk/produkty.html)
 - [Výška pokút podľa zákona](./docs/pokuty.md)
 
+## Štatistické vyhodnotenie dát z rýchlostného radaru
+
+- Na základe štatistického vyhodnotenia dát z rýchlostného radaru za 3 dni môžme konštatovať, že v tejto oblasti každý druhý vodič nedodržiava, resp. prekračuje povolený rýchlostný limit 50 km/h + tolerancia 5 km/h.
+- 99% všetkých prejazdov danou lokalitou neprekročí rýchlosť 78 km/h</li>
+- Rýchlostný radar pri aktuálne nastavených rýchlostných limitoch a disciplinovanosti vodičov je pri použití objektívnej zodpovednosti spôsobilý generovať príjem do rozpočtu obce, alebo štátu viac ako **50 000 €** denne.
+
+
 <img width="1344" height="371" alt="image" src="https://github.com/user-attachments/assets/97f2a9e9-1464-4bbf-9671-45a08b1812c5" />
 
 <img width="973" height="504" alt="image" src="https://github.com/user-attachments/assets/24b2307f-8089-4412-bedc-aa1dfee44bb3" />
