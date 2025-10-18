@@ -6,6 +6,8 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 - Samotný rýchlostný radar je dodávany firmou [Bellimpex s.r.o.](https://www.bellimpex.sk/produkty.html)
 - [Výška pokút podľa zákona](./docs/pokuty.md)
 
+<img width="1344" height="371" alt="image" src="https://github.com/user-attachments/assets/97f2a9e9-1464-4bbf-9671-45a08b1812c5" />
+
 <img width="973" height="504" alt="image" src="https://github.com/user-attachments/assets/24b2307f-8089-4412-bedc-aa1dfee44bb3" />
 
 <img width="1057" height="474" alt="image" src="https://github.com/user-attachments/assets/0b2a7529-0b9c-4c58-aa2a-2ad9608f4aaa" />
