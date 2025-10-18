@@ -8,8 +8,9 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 
 ## Štatistické vyhodnotenie dát z rýchlostného radaru k 18.10.2025
 
-- Na základe štatistického vyhodnotenia dát z rýchlostného radaru za 3 dni môžme konštatovať, že v tejto oblasti každý druhý vodič nedodržiava, resp. prekračuje povolený rýchlostný limit 50 km/h + tolerancia 5 km/h.
-- 99% všetkých prejazdov danou lokalitou neprekročí rýchlosť 78 km/h</li>
+- Na základe štatistického vyhodnotenia dát z rýchlostného radaru za 3 dni môžme konštatovať, že v tejto oblasti každý druhý prejazd lokalitou prekračuje povolený rýchlostný limit **50 km/h + tolerancia 5 km/h**.
+- 99% všetkých prejazdov danou lokalitou neprekročí rýchlosť **78 km/h**
+- 50% všetkých prejazdov danou lokalitou neprekročí rýchlosť **56 km/h**
 - Vo výnimočných (ojedinelých) prípadoch je prekračovaná maximálna povolená rýchlosť v obci aj o viac ako **50 km/h**
 - Rýchlostný radar pri aktuálne nastavených rýchlostných limitoch a disciplinovanosti vodičov je pri použití objektívnej zodpovednosti spôsobilý generovať príjem do rozpočtu obce, alebo štátu viac ako **50 000 €** denne.
 
