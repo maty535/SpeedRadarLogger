@@ -13,6 +13,7 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 - V výnimočných (ojedinelých) prípadoch je prekračovaná maximálna povolená rýchlosť v obci aj o viac ako **50 km/h**
 - Rýchlostný radar pri aktuálne nastavených rýchlostných limitoch a disciplinovanosti vodičov je pri použití objektívnej zodpovednosti spôsobilý generovať príjem do rozpočtu obce, alebo štátu viac ako **50 000 €** denne.
 
+## Zobrazenie dát a ich ukazovateľov pomocou grafov
 
 <img width="1344" height="371" alt="image" src="https://github.com/user-attachments/assets/97f2a9e9-1464-4bbf-9671-45a08b1812c5" />
 
@@ -23,5 +24,8 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 <img width="937" height="456" alt="image" src="https://github.com/user-attachments/assets/7b7944bb-49d7-484d-853b-2b2f118d4a6e" />
 
 <img width="937" height="456" alt="image" src="https://github.com/user-attachments/assets/d1492967-7c4f-4d84-9502-7951823980d0" />
+
+<img width="332" height="1081" alt="image" src="https://github.com/user-attachments/assets/bed4a050-6117-433e-9d48-2e6b7114fc93" />
+
 
 
