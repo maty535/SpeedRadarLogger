@@ -9,7 +9,8 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 
 ## Informácie o základný štatistických ukazovateľoch
 
-
+<img src="./assets/explore-data.jpg" />
+<img src="./assets/explore-distribution.jpg" />
 
 ## Štatistické vyhodnotenie dát z rýchlostného radaru k 18.10.2025
 
