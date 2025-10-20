@@ -17,6 +17,8 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 
 ## Zobrazenie dát a ich ukazovateľov pomocou grafov
 
+<img width="2230" height="414" alt="image" src="https://github.com/user-attachments/assets/35e065f1-ca94-40fe-bbff-d49f261ad482" />
+
 <img width="2015" height="491" alt="image" src="https://github.com/user-attachments/assets/fea8c3b1-4cab-4f15-a3c4-e119c1620331" />
 
 <img width="1344" height="371" alt="image" src="https://github.com/user-attachments/assets/97f2a9e9-1464-4bbf-9671-45a08b1812c5" />
