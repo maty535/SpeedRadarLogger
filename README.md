@@ -7,7 +7,7 @@ Projekt využívajúci dáta z rýchlostného radaru mesta prešov umiestneného
 - [Výška pokút podľa zákona](./docs/pokuty.md)
 
 
-## Základné informácie k pochopeniu základný štatistických ukazovateľov
+## Informácie o základný štatistických ukazovateľoch
 
 
 
