@@ -22,12 +22,26 @@
   </script>
   <script src="js/semantic.min.js"></script>
 
+  <script type="text/javascript">
+      var currentTime = new Date()
+      var hours = currentTime.getHours()
+      var minutes = currentTime.getMinutes()
+      if (minutes <= 5){
+          hours = hours - 1
+      }
+      minutes = "5" + minutes
+      var t_str = hours + ":" + minutes + " ";
+      
+      }
+      document.getElementById('next_update').innerHTML = t_str;
+
  <div class="ui container">
 <h1>SpeedRadarLogger</h1>
 <hr/>
 Projekt využívajúci dáta z rýchlostného radaru mesta Prešov umiestneného na ulici Soľnobanská v Solivare.<br/>
 Samotný rýchlostný radar je dodávany firmou <a href="https://www.bellimpex.sk/produkty.html">Bellimpex s.r.o.</a>
-
+<br/>
+Dáta boli aktualizované: <div id="next_update"></div>
 <h4 class="ui horizontal divider header">
   <i class="fa-solid fa-map-location-dot"></i>
   Poloha Radaru
