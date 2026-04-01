@@ -14,15 +14,27 @@ import ssl
 client_id = f'speedLogger-mqtt-{random.randint(0, 100)}'
 topic = "dvcs/1/mprsv/traffic/sensors/speed/DDATA/sprava-komunikacii/roadsense/radarix/radar-1/default/device/#"
 
+
+logging.basicConfig(
+    filename='mqtt_logger.log',
+    level=logging.WARNING,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 logger = logging.getLogger('Presov.SpeedLogger')
+
 
 def connect_mqtt() -> mqtt:
     def on_connect(client, userdata, flags, reason_code, properties):
         if reason_code == 0:
             logger.info("Connected to MQTT Broker!")
         else:
-            logger.info("Failed to connect, return code %d\n", reason_code)
-
+            logger.error(f"Failed to connect, return code {reason_code}")
+    
+    def on_disconnect(client, userdata, disconnect_flags, reason_code, properties):
+        logger.warning(f"Disconnected from MQTT Broker! Reason: {reason_code}")
+        # Knižnica loop_forever() sa pokúsi o reconnect automaticky, 
+        # ale logovanie nám povie, čo sa deje.
 
     #Pripojenie na špeciálny port
     try:
@@ -30,6 +42,11 @@ def connect_mqtt() -> mqtt:
         client = mqtt.Client(client_id=client_id, 
                              protocol=mqtt.MQTTv311, 
                              callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+        
+        # Nastavenie automatického reconnectu (v sekundách)
+        # min_delay: počiatočná pauza, max_delay: maximálna pauza medzi pokusmi
+        client.reconnect_delay_set(min_delay=30, max_delay=300)
+        
         client.username_pw_set(os.getenv("MQTT_UID"), os.getenv("MQTT_PWD"))
         client.on_connect = on_connect
         # NOVÁ A ZJEDNODUŠENÁ KONFIGURÁCIA TLS:
@@ -43,8 +60,9 @@ def connect_mqtt() -> mqtt:
         #client.tls_insecure_set(True)
         client.connect(os.getenv("BROKER_ADDRESS"), int(os.getenv("BROKER_PORT")))
     except Exception as e:
-        print(f"Nastala chyba počas pripojenia: {e}")
-        exit()
+        logger.critical(f"Fatal error during initial connection: {e}")
+        time.sleep(5) # Počkajte chvíľu pred úplným pádom aplikácie
+        exit(1)
     
     logger.info(f"Connected to mqtt server:{os.getenv('BROKER_ADDRESS')}")
     
@@ -53,9 +71,12 @@ def connect_mqtt() -> mqtt:
 
 def subscribe(client: mqtt):
     def on_message(client, userdata, msg):
-        msg_decoded = msg.payload.decode()
-        logger.info(f"Received `{msg_decoded}` from `{msg.topic}` topic")
-        message_handler(client, msg_decoded, msg.topic)
+        try:
+            msg_decoded = msg.payload.decode()
+            logger.info(f"Received message from `{msg.topic}`")
+            message_handler(client, msg_decoded, msg.topic)
+        except Exception as e:
+            logger.error(f"Error in on_message: {e}")
 
     client.subscribe(topic)
     client.on_message = on_message
